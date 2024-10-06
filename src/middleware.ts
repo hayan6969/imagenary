@@ -3,7 +3,6 @@ import { PathParamsContext } from 'next/dist/shared/lib/hooks-client-context.sha
 
 const protectedRoutes=createRouteMatcher([
     '/profile',
-    '/',
     '/transformations(.*)',
     '/credits',
     '/transformations(.*)/update',
