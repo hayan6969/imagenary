@@ -1,15 +1,17 @@
 'use client'
 import {
     Sheet,
+    SheetClose,
     SheetContent,
     SheetTrigger,
   } from "@/components/ui/sheet"
-import { SignedIn, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import { User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { navLinks } from "../../../constants"
 import { usePathname } from "next/navigation"
+import { Button } from "../ui/button"
   
 
 const MobileNav = () => {
@@ -49,15 +51,31 @@ height={28}
               {navLinks.map((link) => {
                 const isActive = link.route === pathname;
                 return (
+                    
                   <li
                     key={link.route}
-                  className={`${isActive && 'gradient-text'} p-18 flex whitespace-nowrap text-dark-700`}
+                    className={`sidebar-nav_element group ${
+                        isActive
+                          ? "bg-purple-gradient text-white"
+                          : "text-gray-700"
+                      }`}
                   >
-                    <Link className="sidebar-link" href={link.route}>
-                      
+                     <SheetClose key={link.route} asChild>
+                    <Link className="sidebar-link cursor-pointer"  href={link.route}>
+                    <Image
+                        src={link.icon}
+                        alt={link.label}
+                        width={24}
+                        height={24}
+                        className={`${isActive && "brightness-200"}`}
+
+                        
+                      />
                       {link.label}
                     </Link>
+                    </SheetClose>
                   </li>
+                 
                 );
               })}
             </ul>
@@ -66,6 +84,13 @@ height={28}
 </Sheet>
 
 </SignedIn>
+<SignedOut>
+    <Button asChild className="button bg-purple-gradient bg-cover">
+        <Link href="/sign-in">
+            Login
+        </Link>
+    </Button>
+</SignedOut>
 </nav>
     </header>
   )
