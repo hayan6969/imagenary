@@ -36,6 +36,8 @@ export const connectToDatabase=async()=>{
 //due to the server less nature of next js we have to do all 
 //this setup to ensure that we have a single connection to 
 //the database because next js makes a connection every single
-// time a request is made to the server and if we dont optimize
-// this we will have multiple connections to the database which 
+//time a request is made to the server and if we dont optimize
+//this we will have multiple connections to the database which 
 //is not good for the performance of the application
+//in server full applications the connection is done once
+//server less is more scalable
