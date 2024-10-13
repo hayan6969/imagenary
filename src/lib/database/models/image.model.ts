@@ -1,6 +1,6 @@
-import { model, models, Schema } from "mongoose";
+import { Document, model, models, Schema } from "mongoose";
 
-interface IImage {
+export interface IImage extends Document {
     title: string;
     transformationType: string;
     publicId: string;
@@ -12,7 +12,11 @@ interface IImage {
     aspectRatio?: string;
     color?: string;
     prompt?: string;
-    author: string; 
+    author: {
+        _id: string;
+        firstname: string;
+        lastname: string;
+    }; 
     createdAt?: Date;
     updatedAt?: Date;
 }
