@@ -1,7 +1,11 @@
+
 import { UserButton, SignedIn } from '@clerk/nextjs'
-import React from 'react'
+import { auth } from '@clerk/nextjs/server'
+import React, { useEffect } from 'react'
+
 
 const Home = () => {
+  
   return (
     <div>
 <p>Home</p>

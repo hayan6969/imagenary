@@ -1,3 +1,4 @@
+
 import Header from '@/components/shared/Header'
 import React from 'react'
 import  {transformationTypes} from '../../../../../../constants/index'
@@ -10,6 +11,8 @@ const AddTransformationTypePage = async ({params:{type}}:SearchParamProps) => {
  const transformation=transformationTypes[type]
  const {userId}=auth()
 
+ 
+ 
 if(!userId) redirect('/sign-in')
  
 const user = await getUserById(userId)
