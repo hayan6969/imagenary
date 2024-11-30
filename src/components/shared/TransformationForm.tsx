@@ -26,6 +26,7 @@ import { title } from "process"
 import { CustomField } from "./CustomField"
 import { useState, useTransition } from "react"
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils"
+import { updateCredits } from "@/lib/actions/users.actions"
 
 export const formSchema = z.object({
   Title: z.string(),
@@ -45,13 +46,13 @@ const TransformationForm = ({action,data=null,userId,config=null,creditBalance,t
         publicId:data?.publicId
     } :defaultValues
 
-    // 1. Define a form 
+    // 1. Defined a form 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues:initialValues
       })
      
-      // 2. Define a submit handler.
+      // 2. Defined a submit handler.
       function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
@@ -86,11 +87,19 @@ debounce(()=>{
   return onChangeField(value)
 },1000)
 }
+
+  // TODO: Return to updateCredits
 const onTransformhandler=async()=>{
 setIsTransforming(true)
 setTransformationConfig(
   deepMergeObjects(newTransformation,transformationConfig) //merges all the keys in the two objects and gives a new object with the keys which is then set to the transformation config
+
 )
+setNewTransformation(null)
+
+startTransition(async ()=>{
+  // await updateCredits(userId,creditFee)
+})
 }
 const [isPending,startTransition]=useTransition()
 const [isSubmitting,setIsSubmitting]=useState(false)
