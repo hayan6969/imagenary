@@ -24,8 +24,8 @@ import { Input } from "@/components/ui/input"
 import { aspectRatioOptions, defaultValues, transformationTypes } from "../../../constants"
 import { title } from "process"
 import { CustomField } from "./CustomField"
-import { useState } from "react"
-import { AspectRatioKey } from "@/lib/utils"
+import { useState, useTransition } from "react"
+import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils"
 
 export const formSchema = z.object({
   Title: z.string(),
@@ -71,9 +71,28 @@ const onSelectFieldHandler=(value:string, onChangeField:(value:String)=>void)=>{
   return onChangeField(value)
 }
 const onInputChangeHandler=(fieldName:string,type:string,value:string,onChangeField:(value:String)=>void)=>{
+debounce(()=>{
+  setNewTransformation((prevState:any)=>(
+    {
+      ...prevState,
+      [type]:{
+        ...prevState?.[type],
+        [fieldName=== 'prompt' ? 'prompt':'to']:value
+      }
+      
+    }
+  ))
 
+  return onChangeField(value)
+},1000)
 }
-const onTransformhandler=()=>{}
+const onTransformhandler=async()=>{
+setIsTransforming(true)
+setTransformationConfig(
+  deepMergeObjects(newTransformation,transformationConfig) //merges all the keys in the two objects and gives a new object with the keys which is then set to the transformation config
+)
+}
+const [isPending,startTransition]=useTransition()
 const [isSubmitting,setIsSubmitting]=useState(false)
 const [isTransforming,setIsTransforming]=useState(false)
 const [transformationConfig,setTransformationConfig]=useState(config)
