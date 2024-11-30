@@ -64,6 +64,7 @@ const onSelectFieldHandler=(value:string, onChangeField:(value:String)=>void)=>{
 const onInputChangeHandler=(fieldName:string,type:string,value:string,onChangeField:(value:String)=>void)=>{
 
 }
+const onTransformhandler=()=>{}
 const [isSubmitting,setIsSubmitting]=useState(false)
 const [isTransforming,setIsTransforming]=useState(false)
 const [transformationConfig,setTransformationConfig]=useState(config)
@@ -163,10 +164,31 @@ onSelectFieldHandler(value,field.onChange)
         </div>
       )
      }
+     <div className="flex flex-col gap-4">
+
+     <Button type="button"
+     className="submit-button capitalize"
+     onClick={onTransformhandler}
+     disabled={isTransforming || newTransformation===null }
+     >
+
+{
+  isTransforming ? "Transforming...": "Apply Transformation"
+}
+
+     </Button>
+
 
      <Button type="submit"
      className="submit-button capitalize"
-     >Submit</Button>
+     disabled={isSubmitting }
+     >{
+isSubmitting ? "Submitting...": "Save Image"
+     }
+     </Button>
+     </div>
+
+     
     </form>
   </Form>
   )
