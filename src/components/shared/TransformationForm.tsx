@@ -35,7 +35,7 @@ export const formSchema = z.object({
   publicId: z.string(),
 })
 
-const TransformationForm = ({action,data=null,userId,creditBalance,type}:TransformationFormProps) => {
+const TransformationForm = ({action,data=null,userId,config=null,creditBalance,type}:TransformationFormProps) => {
 
     const initialValues=data && action==="Update"? {
         title:data?.title,
@@ -61,7 +61,12 @@ const TransformationForm = ({action,data=null,userId,creditBalance,type}:Transfo
 const onSelectFieldHandler=(value:string, onChangeField:(value:String)=>void)=>{
   
 }
+const onInputChangeHandler=(fieldName:string,type:string,value:string,onChangeField:(value:String)=>void)=>{
 
+}
+const [isSubmitting,setIsSubmitting]=useState(false)
+const [isTransforming,setIsTransforming]=useState(false)
+const [transformationConfig,setTransformationConfig]=useState(config)
 const transformationType=transformationTypes[type]
 const [image,setImage]=useState(data)
 const [newTransformation,setNewTransformation]=useState(null)
@@ -108,6 +113,60 @@ onSelectFieldHandler(value,field.onChange)
         />
       )
      }
+
+     {
+      (type==="remove" || type==="recolor") && (
+        <div className="prompt-field">
+          <CustomField
+          control={form.control}
+          name="prompt"
+          formLabel={
+            type==="remove"?"Object to remove":"object to recolor"
+          }
+          className="w-full"
+          render={({field})=> <Input
+          value={field.value}
+          className="input-field"
+          onChange={(e)=>onInputChangeHandler(
+            'prompt',
+            e.target.value,
+            type,
+            field.onChange,
+            
+          )}
+
+          /> }
+         />
+{
+  type==="recolor" && (
+    <CustomField
+    control={form.control}
+    name="color"
+    formLabel="Replacement Color"
+    className="w-full"
+    render={({field})=> <Input
+    value={field.value}
+    className="input-field"
+    onChange={(e)=>onInputChangeHandler(
+      'color',
+      e.target.value,
+      'recolor',
+      field.onChange,
+      
+    )}
+
+    /> }
+   />
+  )
+}
+
+        </div>
+      )
+     }
+
+     <Button type="submit"
+     className="submit-button capitalize"
+     >Submit</Button>
     </form>
   </Form>
   )
