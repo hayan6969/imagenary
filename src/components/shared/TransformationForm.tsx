@@ -59,7 +59,16 @@ const TransformationForm = ({action,data=null,userId,config=null,creditBalance,t
       }
 
 const onSelectFieldHandler=(value:string, onChangeField:(value:String)=>void)=>{
-  
+  const imageSize=aspectRatioOptions[value as AspectRatioKey]
+  setImage((prevState:any)=>({
+    ...prevState,
+    aspectRatio:imageSize.aspectRatio,
+    width:imageSize.width,
+    height:imageSize.height
+  }))
+
+  setNewTransformation(transformationType.config)
+  return onChangeField(value)
 }
 const onInputChangeHandler=(fieldName:string,type:string,value:string,onChangeField:(value:String)=>void)=>{
 
@@ -70,7 +79,7 @@ const [isTransforming,setIsTransforming]=useState(false)
 const [transformationConfig,setTransformationConfig]=useState(config)
 const transformationType=transformationTypes[type]
 const [image,setImage]=useState(data)
-const [newTransformation,setNewTransformation]=useState(null)
+const [newTransformation,setNewTransformation]=useState<typeof transformationType.config | null>(null)
   return (
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
