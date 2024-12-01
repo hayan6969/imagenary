@@ -28,6 +28,7 @@ import { useState, useTransition } from "react"
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils"
 import { updateCredits } from "@/lib/actions/users.actions"
 import MediaUploader from "./MediaUploader"
+import TransformedImage from "./TransformedImage"
 
 export const formSchema = z.object({
   Title: z.string(),
@@ -222,6 +223,15 @@ render={({field})=>(
 
 
 
+/>
+
+<TransformedImage
+image ={image}
+type={type}
+title={form.getValues().Title}
+transformationConfig={transformationConfig}
+setIsTransforming={setIsTransforming}
+isTransforming={isTransforming}
 />
 
      </div>
