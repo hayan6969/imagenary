@@ -26,7 +26,7 @@ declare type CreateUserParams = {
       width: number;
       height: number;
       config: any;
-      secureRL: string;
+      secureURL: string;
       transformationURL: string;
       aspectRatio: string | undefined;
       prompt: string | undefined;
@@ -45,7 +45,7 @@ declare type CreateUserParams = {
       width: number;
       height: number;
       config: any;
-      secureRL: string;
+      secureURL: string;
       transformationURL: string;
       aspectRatio: string | undefined;
       prompt: string | undefined;

@@ -1,9 +1,9 @@
 "use client"
-
-import { object, z } from "zod"
+ 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { z } from "zod"
+
 import {
   Select,
   SelectContent,
@@ -11,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -21,19 +23,18 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { aspectRatioOptions, defaultValues, transformationTypes } from "../../../constants"
-import { title } from "process"
+import { aspectRatioOptions, creditFee, defaultValues, transformationTypes } from "../../../constants/index"
 import { CustomField } from "./CustomField"
 import { useEffect, useState, useTransition } from "react"
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils"
-import { updateCredits } from "@/lib/actions/users.actions"
 import MediaUploader from "./MediaUploader"
 import TransformedImage from "./TransformedImage"
+import { updateCredits } from "../../lib/actions/users.actions"
 import { getCldImageUrl } from "next-cloudinary"
 import { addImage, updateImage } from "@/lib/actions/image.actions"
 import { useRouter } from "next/navigation"
-import { set } from "mongoose"
-
+import { InsufficientCreditsModal } from "./InsufficientCreditsModal"
+ 
 export const formSchema = z.object({
   title: z.string(),
   aspectRatio: z.string().optional(),
@@ -71,9 +72,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     setIsSubmitting(true);
 
     if(data || image) {
-      console.log("image data is", image)
-      console.log("data is", data)
-      const transformationURL = getCldImageUrl({
+      const transformationUrl = getCldImageUrl({
         width: image?.width,
         height: image?.height,
         src: image?.publicId,
@@ -87,8 +86,8 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         width: image?.width,
         height: image?.height,
         config: transformationConfig,
-        secureRL: image.secureURL,
-        transformationURL: transformationURL,
+        secureURL: image?.secureURL,
+        transformationURL: transformationUrl,
         aspectRatio: values.aspectRatio,
         prompt: values.prompt,
         color: values.color,
@@ -174,7 +173,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     setNewTransformation(null)
 
     startTransition(async () => {
-      await updateCredits(userId, -1)
+      await updateCredits(userId, creditFee)
     })
   }
 
@@ -187,7 +186,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />} */}
+        {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <CustomField 
           control={form.control}
           name="title"
